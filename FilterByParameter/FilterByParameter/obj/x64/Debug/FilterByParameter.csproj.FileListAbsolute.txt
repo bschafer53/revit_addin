@@ -68,3 +68,4 @@ D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter.csproj.GenerateResource.Cache
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter.dll
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter.pdb
+D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter.ParameterSelector.resources
