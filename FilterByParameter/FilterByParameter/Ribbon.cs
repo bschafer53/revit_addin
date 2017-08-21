@@ -62,8 +62,8 @@ namespace FilterByParameter
 
         public void CreateTheRibbonPanel(UIControlledApplication application)
         {
-            string firstPanelName = "The First Panel";
-            string theribbon = "New Ribbon";
+            string firstPanelName = "Selection Filters";
+            string theribbon = "BPS Customs";
             application.CreateRibbonTab(theribbon);
 
             RibbonPanel TheRibbonPanel = application.CreateRibbonPanel(theribbon, firstPanelName);
@@ -73,10 +73,10 @@ namespace FilterByParameter
             SplitButton splitButton = TheRibbonPanel.AddItem(splitButtonData) as SplitButton;
             PushButton pushButton = splitButton.AddPushButton(new PushButtonData("Parameter Filter",
                 "Filter by Parameter", AddInPath, "FilterByParameter.ParameterFilter"));
-            pushButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "CreateWall.png"), UriKind.Absolute));
-            pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "CreateWall-S.png"), UriKind.Absolute));
-            pushButton.ToolTip = "This button will eventually filter by parameter";
-            pushButton.ToolTipImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "CreateWallTooltip.bmp"), UriKind.Absolute));
+            pushButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass.png"), UriKind.Absolute));
+            pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
+            pushButton.ToolTip = "Select an element with the desired parameter value. Select the parameter you would like to filter by in the dropdown menu.";
+            //pushButton.ToolTipImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "CreateWallTooltip.bmp"), UriKind.Absolute));
 
             #endregion
         }
