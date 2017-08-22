@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 
@@ -16,25 +17,31 @@ namespace FilterByParameter
     {
         private ExternalCommandData datas;
         private ElementId ids;
-        public ParameterSelector(ParameterSet param, ExternalCommandData data, ElementId id)
+        private bool projs;
+        public ParameterSelector(ParameterSet param, ExternalCommandData data, ElementId id, bool proj)
         {
+            
             InitializeComponent();
+            ToolTip ToolTip1 = new ToolTip();
+            ToolTip ToolTil2 = new ToolTip();
+            ToolTip1.SetToolTip(andRadio, "Only elements that match all selected parameters will be selected.");
+            ToolTil2.SetToolTip(orRadio, "Any element that matches any selected parameter will be selected");
             List<Par> parList = new List<Par>();
             datas = data;
             ids = id;
+            projs = proj;
+            
 
 
             foreach (Parameter p in param)
             {
                 parList.Add(new Par(){ID=p,Name = p.Definition.Name + ": " + p.AsValueString()});
-                //cbParams.Items.Add(p + ": " + p.Definition.Name + ": " + p.AsValueString());
             }
 
-            cbParams.DataSource = parList;
-            cbParams.ValueMember = "ID";
-            
-            cbParams.DisplayMember = "Name";
-            cbParams.SelectedIndex = 0;
+            List<Par> test = parList.OrderBy(o => o.Name).ToList();
+            checksParam.DataSource = test;
+            checksParam.ValueMember = "ID";
+            checksParam.DisplayMember = "Name";
         }
 
 
@@ -42,14 +49,20 @@ namespace FilterByParameter
         {
             try
             {
+                bool andor = andRadio.Checked;
 
-                UIDocument el = datas.Application.ActiveUIDocument;
+                Par par = new Par();
+                IList<Parameter> pas = new List<Parameter>();
 
-                Parameter pa = cbParams.SelectedValue as Parameter;
-     
-                //TaskDialog.Show("View", el.Application.ActiveUIDocument.Document.GetElement(ids).get_Parameter(pa.Definition).AsValueString());
+                foreach (var item in checksParam.CheckedItems)
+                {
+                    par = item as Par;
+                    pas.Add(par.ID);
+                    
+                }
+
                 RunFilter rf = new RunFilter();
-                rf.Execute(ids, pa, datas);
+                rf.Execute(ids, pas, datas, andor, projs);
                 Close();
             }
             catch (Exception exception)

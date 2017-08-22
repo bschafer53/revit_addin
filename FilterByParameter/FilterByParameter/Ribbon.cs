@@ -43,14 +43,6 @@ namespace FilterByParameter
         {
             try
             {
-                //remove events
-               /* List<RibbonPanel> myPanels = application.GetRibbonPanels();
-                Autodesk.Revit.UI.ComboBox comboboxLevel = (Autodesk.Revit.UI.ComboBox)(myPanels[0].GetItems()[2]);
-                application.ControlledApplication.DocumentCreated -= new EventHandler<
-                    Autodesk.Revit.DB.Events.DocumentCreatedEventArgs>(DocumentCreated);
-                Autodesk.Revit.UI.TextBox textBox = myPanels[0].GetItems()[5] as Autodesk.Revit.UI.TextBox;
-                textBox.EnterPressed -= new EventHandler<
-                    Autodesk.Revit.UI.Events.TextBoxEnterPressedEventArgs>(SetTextBoxValue);*/
                 return Result.Succeeded;
             }
             catch (Exception e)
@@ -72,65 +64,16 @@ namespace FilterByParameter
             SplitButtonData splitButtonData = new SplitButtonData("Parameter Filter","Select a member to");
             SplitButton splitButton = TheRibbonPanel.AddItem(splitButtonData) as SplitButton;
             PushButton pushButton = splitButton.AddPushButton(new PushButtonData("Parameter Filter",
-                "Filter by Parameter", AddInPath, "FilterByParameter.ParameterFilter"));
+                "Filter by Parameter: View", AddInPath, "FilterByParameter.ParameterFilter"));
             pushButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass.png"), UriKind.Absolute));
             pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
             pushButton.ToolTip = "Select an element with the desired parameter value. Select the parameter you would like to filter by in the dropdown menu.";
-            //pushButton.ToolTipImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "CreateWallTooltip.bmp"), UriKind.Absolute));
+            //pushButton.ToolTipImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Blue4thFloorBuilding.gif"), UriKind.Absolute));
+            //pushButton = splitButton.AddPushButton(new PushButtonData("Parameter Filter Project", "Filter by Parameter: Entire Project", AddInPath, "FilterByParameter.ParameterFilterProject"));
+            //pushButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass.png"), UriKind.Absolute));
+            //pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
 
             #endregion
-        }
-
-        public void DocumentCreated(object sender, Autodesk.Revit.DB.Events.DocumentCreatedEventArgs e)
-        {
-            uiApplication = new UIApplication(e.Document.Application);
-            List<RibbonPanel> myPanels = uiApplication.GetRibbonPanels();
-
-            Autodesk.Revit.UI.ComboBox comboboxLevel = (Autodesk.Revit.UI.ComboBox)(myPanels[0].GetItems()[2]);
-            if (null == comboboxLevel) { return; }
-            FilteredElementCollector collector = new FilteredElementCollector(uiApplication.ActiveUIDocument.Document);
-            ICollection<Element> founds = collector.OfClass(typeof(Level)).ToElements();
-            foreach (Element elem in founds)
-            {
-                Level level = elem as Level;
-                ComboBoxMemberData comboBoxMemberData = new ComboBoxMemberData(level.Name, level.Name);
-                ComboBoxMember comboboxMember = comboboxLevel.AddItem(comboBoxMemberData);
-                comboboxMember.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "LevelsSelector.png"), UriKind.Absolute));
-            }
-            //refresh level list (in case user created new level after document created)
-            comboboxLevel.DropDownOpened += new EventHandler<ComboBoxDropDownOpenedEventArgs>(AddNewLevels);
-        }
-
-        public void AddNewLevels(object sender, ComboBoxDropDownOpenedEventArgs args)
-        {
-            Autodesk.Revit.UI.ComboBox comboboxLevel = sender as Autodesk.Revit.UI.ComboBox;
-            if (null == comboboxLevel) { return; }
-            FilteredElementCollector collector = new FilteredElementCollector(uiApplication.ActiveUIDocument.Document);
-            ICollection<Element> founds = collector.OfClass(typeof(Level)).ToElements();
-            foreach (Element elem in founds)
-            {
-                Level level = elem as Level;
-                bool alreadyContained = false;
-                foreach (ComboBoxMember comboboxMember in comboboxLevel.GetItems())
-                {
-                    if (comboboxMember.Name == level.Name)
-                    {
-                        alreadyContained = true;
-                    }
-                }
-                if (!alreadyContained)
-                {
-                    ComboBoxMemberData comboBoxMemberData = new ComboBoxMemberData(level.Name, level.Name);
-                    ComboBoxMember comboboxMember = comboboxLevel.AddItem(comboBoxMemberData);
-                    comboboxMember.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "LevelsSelector.png"), UriKind.Absolute));
-                }
-            }
-
-        }
-
-        public void SetTextBoxValue(object sender, TextBoxEnterPressedEventArgs args)
-        {
-            TaskDialog.Show("TextBox EnterPressed Event", "New wall's mark changed.");
         }
 
     }

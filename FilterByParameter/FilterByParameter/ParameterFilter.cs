@@ -33,31 +33,44 @@ namespace FilterByParameter
                     Element el = uidoc.Document.GetElement(id);
                     ParameterSet parameterSet = el.Parameters;
 
-                    ParameterSelector ps = new ParameterSelector(parameterSet, data, id);
+                    ParameterSelector ps = new ParameterSelector(parameterSet, data, id, false);
                     ps.Show();
+                }
+                
+                t.Commit();
+                return Result.Succeeded;
+            }
+            catch (Exception e)
+            {
+                TaskDialog.Show("Error", e.Message);
+                t.Commit();
+                return Result.Failed;
+            }
+        }
+    }
 
-                 /*   string parameterList = "";
-                    ICollection<ElementId> eid = new List<ElementId>();
+    [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
+    [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
+    [Autodesk.Revit.Attributes.Journaling(Autodesk.Revit.Attributes.JournalingMode.NoCommandData)]
+    class ParameterFilterProject : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData data, ref string message, ElementSet elements)
+        {
+            UIDocument uidoc = data.Application.ActiveUIDocument;
+            Selection selection = uidoc.Selection;
+            Transaction t = new Transaction(data.Application.ActiveUIDocument.Document, "New");
+            t.Start();
+            try
+            {
+                Reference hasPicked = selection.PickObject(ObjectType.Element);
+                if (hasPicked != null)
+                {
+                    ElementId id = hasPicked.ElementId;
+                    Element el = uidoc.Document.GetElement(id);
+                    ParameterSet parameterSet = el.Parameters;
 
-
-                    IList<Element> elems = new FilteredElementCollector(uidoc.Document, uidoc.Document.ActiveView.Id).ToElements();
-
-                    foreach (Element elem in elems)
-                    {
-                        if (null != elem.LookupParameter("Area"))
-                        {
-                            if (elem.LookupParameter("Area").AsValueString() == el.LookupParameter("Area").AsValueString())
-                            {
-                                eid.Add(elem.Id);
-                                parameterList += elem.Name + ": ";
-                                parameterList += elem.Id + "\n";
-                            }
-                        }
-                    }
-
-                    //eid.Add(el.Id);
-                    uidoc.Selection.SetElementIds(eid);
-                    TaskDialog.Show("Elements", parameterList);*/
+                    ParameterSelector ps = new ParameterSelector(parameterSet, data, id, true);
+                    ps.Show();
                 }
                 
                 t.Commit();
@@ -91,37 +104,110 @@ namespace FilterByParameter
             }
         }
 
-        public Result Execute(ElementId id, Parameter pa, ExternalCommandData data)
+        public Result Execute(ElementId id, IList<Parameter> pa, ExternalCommandData data, bool andor, bool proj)
         {
             try
             {
-                Document e = data.Application.ActiveUIDocument.Document;
-                //TaskDialog.Show("Success", pa.Definition.Name);
 
                 string parameterList = "";
                 ICollection<ElementId> eid = new List<ElementId>();
                 UIDocument uidoc = data.Application.ActiveUIDocument;
-
-                IList<Element> elems = new FilteredElementCollector(uidoc.Document, uidoc.Document.ActiveView.Id).ToElements();
-                Element el = uidoc.Document.GetElement(id);
-
-                foreach (Element elem in elems)
+                IList<bool> check = new List<bool>();
+                IList<bool> check2 = new List<bool>();
+                IList<Element> elems = new List<Element>();
+                if (proj)
                 {
-                    if (null != elem.get_Parameter(pa.Definition))
+                    FilteredElementCollector fec = new  FilteredElementCollector(uidoc.Document).WhereElementIsNotElementType();
+                    foreach (Element e in fec)
                     {
-                        if (elem.get_Parameter(pa.Definition).AsValueString() == el.get_Parameter(pa.Definition).AsValueString())
+                        if (null != e.Category && e.CanHaveTypeAssigned())
                         {
-                            eid.Add(elem.Id);
-                            parameterList += elem.Name + ": ";
-                            parameterList += elem.Id + "\n";
+                            elems.Add(e);
+                        }
+                        
+                    }
+                }
+                else
+                {
+                    elems = new FilteredElementCollector(uidoc.Document, uidoc.Document.ActiveView.Id).ToElements();
+                }
+                
+                Element el = uidoc.Document.GetElement(id);
+                if (andor)
+                {
+                    foreach (Element elem in elems)
+                    {
+                        check.Clear();
+                        check2.Clear();
+                        foreach (Parameter pas in pa)
+                        {
+                            if (null != elem.get_Parameter(pas.Definition))
+                            {
+                                check.Add(true);
+                            }
+                            else
+                            {
+                                check.Add(false);
+                            }
+                        }
+                        if (check.Contains(false))
+                        {
+
+                        }
+                        else
+                        {
+                            foreach (Parameter pas in pa)
+                            {
+                                check2.Add(elem.get_Parameter(pas.Definition).AsValueString() ==
+                                           el.get_Parameter(pas.Definition).AsValueString());
+                            }
+                            if (check2.Contains(false))
+                            {
+
+                            }
+                            else
+                            {
+                                eid.Add(elem.Id);
+                                parameterList += elem.Name + ": ";
+                                parameterList += elem.Id + "\n";
+                            }
                         }
                     }
                 }
+                else
+                {
+                    foreach (Element elem in elems)
+                    {
 
-                //eid.Add(el.Id);
+                        check.Clear();
+                        check2.Clear();
+                        foreach (Parameter pas in pa)
+                        {
+                            if (null != elem.get_Parameter(pas.Definition))
+                            {
+                                check.Add(true);
+                            }
+                            else
+                            {
+                                check.Add(false);
+                            }
+                        }
+
+                        for (int i = 0; i < check.Count; i++)
+                        {
+                            if (!check[i]) continue;
+                            check2.Add(elem.get_Parameter(pa[i].Definition).AsValueString() ==
+                                       el.get_Parameter(pa[i].Definition).AsValueString());
+                        }
+                        if (check2.Contains(true))
+                        {
+                            eid.Add(elem.Id);
+                        }
+                    }
+
+                }
+
                 uidoc.Selection.SetElementIds(eid);
-                //TaskDialog.Show("Elements", parameterList);
-
                 return Result.Succeeded;
             }
             catch (Exception e)
