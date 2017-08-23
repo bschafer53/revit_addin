@@ -30,12 +30,32 @@ namespace FilterByParameter
             datas = data;
             ids = id;
             projs = proj;
-            
 
-
-            foreach (Parameter p in param)
+            if (proj)
             {
-                parList.Add(new Par(){ID=p,Name = p.Definition.Name + ": " + p.AsValueString()});
+                foreach (Parameter p in param)
+                {
+                    if (p.Definition.Name == "Mark")
+                    {
+                        parList.Add(new Par() { ID = p, Name = p.Definition.Name + ": " + p.AsValueString() + ": " + p.HasValue + ": "+ p.AsString()});
+                    }
+                    
+                }
+            }
+            else
+            {
+                foreach (Parameter p in param)
+                {
+                    if (p.AsValueString() != null)
+                    {
+                        parList.Add(new Par() {ID = p, Name = p.Definition.Name + ": " + p.AsValueString()});
+                    }
+                    else
+                    {
+                        parList.Add(new Par() { ID = p, Name = p.Definition.Name + ": " + p.AsString() });
+                    }
+                   
+                }
             }
 
             List<Par> test = parList.OrderBy(o => o.Name).ToList();

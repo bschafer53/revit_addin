@@ -158,8 +158,16 @@ namespace FilterByParameter
                         {
                             foreach (Parameter pas in pa)
                             {
-                                check2.Add(elem.get_Parameter(pas.Definition).AsValueString() ==
-                                           el.get_Parameter(pas.Definition).AsValueString());
+                                if (elem.get_Parameter(pas.Definition).AsValueString() != null)
+                                {
+                                    check2.Add(elem.get_Parameter(pas.Definition).AsValueString() ==
+                                               el.get_Parameter(pas.Definition).AsValueString());
+                                }
+                                else
+                                {
+                                    check2.Add(elem.get_Parameter(pas.Definition).AsString() ==
+                                               el.get_Parameter(pas.Definition).AsString());
+                                }
                             }
                             if (check2.Contains(false))
                             {
@@ -196,8 +204,17 @@ namespace FilterByParameter
                         for (int i = 0; i < check.Count; i++)
                         {
                             if (!check[i]) continue;
-                            check2.Add(elem.get_Parameter(pa[i].Definition).AsValueString() ==
-                                       el.get_Parameter(pa[i].Definition).AsValueString());
+                            if (elem.get_Parameter(pa[i].Definition).AsValueString() != null)
+                            {
+                                check2.Add(elem.get_Parameter(pa[i].Definition).AsValueString() ==
+                                           el.get_Parameter(pa[i].Definition).AsValueString());
+                            }
+                            else
+                            {
+                                check2.Add(elem.get_Parameter(pa[i].Definition).AsString() ==
+                                           el.get_Parameter(pa[i].Definition).AsString());
+                            }
+                            
                         }
                         if (check2.Contains(true))
                         {
@@ -242,7 +259,7 @@ namespace FilterByParameter
                 foreach (Element elem in elems)
                 {
                     if (null == elem.get_Parameter(BuiltInParameter.ALL_MODEL_MARK)) continue;
-                    if (elem.get_Parameter(BuiltInParameter.ALL_MODEL_MARK).AsValueString() == search)
+                    if (elem.get_Parameter(BuiltInParameter.ALL_MODEL_MARK).AsString() == search)
                     {
                         eid.Add(elem.Id);
                     }
