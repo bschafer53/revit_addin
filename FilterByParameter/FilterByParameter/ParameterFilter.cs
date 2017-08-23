@@ -217,4 +217,53 @@ namespace FilterByParameter
             }
         }
     }
+
+    [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
+    [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
+    [Autodesk.Revit.Attributes.Journaling(Autodesk.Revit.Attributes.JournalingMode.NoCommandData)]
+    class SearchMark : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData data, ref string message, ElementSet elements)
+        {
+            return Result.Succeeded;
+        }
+
+        public Result Execute(UIApplication app, string search)
+        {
+
+
+            try
+
+            {
+                Document doc = app.ActiveUIDocument.Document;
+                ICollection<ElementId> eid = new List<ElementId>();
+                IList<Element> elems = new List<Element>();
+                elems = new FilteredElementCollector(doc, doc.ActiveView.Id).ToElements();
+                foreach (Element elem in elems)
+                {
+                    if (null == elem.get_Parameter(BuiltInParameter.ALL_MODEL_MARK)) continue;
+                    if (elem.get_Parameter(BuiltInParameter.ALL_MODEL_MARK).AsValueString() == search)
+                    {
+                        eid.Add(elem.Id);
+                    }
+                }
+                if (eid.Count > 0)
+                {
+                    app.ActiveUIDocument.Selection.SetElementIds(eid);
+                    //TaskDialog.Show("Success", uidoc.Document.PathName);
+                }
+                else
+                {
+                    TaskDialog.Show("No Match", "No elements in the current view have the specified Mark.");
+                }
+               
+                return Result.Succeeded;
+            }
+            catch (Exception e)
+            {
+                TaskDialog.Show("Failed", e.Message);
+                return Result.Failed;
+            }
+        }
+    }
 }
