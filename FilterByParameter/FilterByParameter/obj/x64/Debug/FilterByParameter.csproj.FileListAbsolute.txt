@@ -69,3 +69,4 @@ D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter.dll
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter.pdb
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter.ParameterSelector.resources
+D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\bin\x64\Debug\FilterByParameter.dll.config
