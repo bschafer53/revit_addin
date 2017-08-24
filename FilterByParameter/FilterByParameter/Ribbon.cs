@@ -140,7 +140,8 @@ namespace FilterByParameter
             PushButtonData clipTitleData = new PushButtonData("Far Clip Offset", "Far Clip Offset", AddInPath, firstPanelName);
             PushButtonData nameTitleData = new PushButtonData("Created By Options", "Far Clip Offset", AddInPath, firstPanelName);
             
-            
+            //The beginning of the radio button
+            //Another Line
             RadioButtonGroupData radioData = new RadioButtonGroupData("radioGroup");
             TextBoxData testBoxData2 = new TextBoxData("SectionDistance");
             testBoxData2.Name = "Section Distance";

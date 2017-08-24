@@ -69,6 +69,7 @@ namespace FilterByParameter
         {
             try
             {
+                
                 bool andor = andRadio.Checked;
 
                 Par par = new Par();
