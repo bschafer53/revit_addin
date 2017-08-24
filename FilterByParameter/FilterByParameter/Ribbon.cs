@@ -57,7 +57,7 @@ namespace FilterByParameter
             Document doc = args.Document;
             string username = doc.Application.Username;
             List<RibbonPanel> myPanels = app.GetRibbonPanels("BPS Customs");
-            ComboBox cb = myPanels[2].GetItems()[2] as ComboBox;
+            ComboBox cb = myPanels[2].GetItems()[3] as ComboBox;
             ComboBoxMemberData cboxMemDataC = new ComboBoxMemberData("C", username);
             cb.AddItem(cboxMemDataC);
             IList<ComboBoxMember> cm = cb.GetItems();
@@ -73,9 +73,6 @@ namespace FilterByParameter
                     cb.Current = cm[2];
                     break;
             }
-            //TaskDialog.Show("Now", app.ActiveUIDocument.Document.PathName);
-
-            //Your code here...
         }
 
         public Result OnShutdown(UIControlledApplication application)
@@ -86,11 +83,11 @@ namespace FilterByParameter
                 Autodesk.Revit.UI.TextBox textBox = myPanels[1].GetItems()[0] as Autodesk.Revit.UI.TextBox;
                 textBox.EnterPressed -= new EventHandler<
                     Autodesk.Revit.UI.Events.TextBoxEnterPressedEventArgs>(SetTextBoxValue);
-                TextBox tbox = myPanels[2].GetItems()[1] as TextBox;
+                TextBox tbox = myPanels[2].GetItems()[2] as TextBox;
                 tbox.EnterPressed -=
                     new EventHandler<Autodesk.Revit.UI.Events.TextBoxEnterPressedEventArgs>(ProcessText);
                 application.ControlledApplication.DocumentOpened -= OnDocOpened;
-                ComboBox cbox = myPanels[2].GetItems()[2] as ComboBox;
+                ComboBox cbox = myPanels[2].GetItems()[3] as ComboBox;
                 cbox.CurrentChanged -= new EventHandler<ComboBoxCurrentChangedEventArgs>(ProcessCb);
                 RadioButtonGroup rb = myPanels[2].GetItems()[0] as RadioButtonGroup;
                 
@@ -114,10 +111,10 @@ namespace FilterByParameter
             RibbonPanel TheRibbonPanel = application.CreateRibbonPanel(theribbon, firstPanelName);
 
             #region Create Split Button
-            SplitButtonData splitButtonData = new SplitButtonData("Parameter Filter","Select a member to");
-            SplitButton splitButton = TheRibbonPanel.AddItem(splitButtonData) as SplitButton;
-            PushButton pushButton = splitButton.AddPushButton(new PushButtonData("Parameter Filter",
-                "Filter by Parameter: View", AddInPath, "FilterByParameter.ParameterFilter"));
+            //SplitButtonData splitButtonData = new SplitButtonData("Parameter Filter","Select a member to");
+            //SplitButton splitButton = TheRibbonPanel.AddItem(splitButtonData) as SplitButton;
+            PushButton pushButton = TheRibbonPanel.AddItem(new PushButtonData("Parameter Filter",
+                "Filter by \n Parameter", AddInPath, "FilterByParameter.ParameterFilter")) as PushButton;
             pushButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass.png"), UriKind.Absolute));
             pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
             pushButton.ToolTip = "Select an element with the desired parameter value. Select the parameter you would like to filter by in the dropdown menu.";
@@ -127,18 +124,22 @@ namespace FilterByParameter
             //pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
             //TheRibbonPanel.AddSeparator();
             #endregion
+
             RibbonPanel SecRibbonPanel = application.CreateRibbonPanel(theribbon, secondPanelName);
             TextBoxData testBoxData = new TextBoxData("SearchMark");
             Autodesk.Revit.UI.TextBox textBox = (Autodesk.Revit.UI.TextBox)(SecRibbonPanel.AddItem(testBoxData));
             textBox.PromptText = "new Mark search"; //default wall mark
-            textBox.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "WallMark.png"), UriKind.Absolute));
+            textBox.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
             textBox.ToolTip = "Search for Elements with a Mark containing: ";
+            textBox.Width = 150;
             textBox.ShowImageAsButton = true;
             textBox.EnterPressed += new EventHandler<Autodesk.Revit.UI.Events.TextBoxEnterPressedEventArgs>(SetTextBoxValue);
 
 
             RibbonPanel SectionPanel = application.CreateRibbonPanel(theribbon, panelParameterName);
-
+            PushButtonData clipTitleData = new PushButtonData("Far Clip Offset", "Far Clip Offset", AddInPath, firstPanelName);
+            PushButtonData nameTitleData = new PushButtonData("Created By Options", "Far Clip Offset", AddInPath, firstPanelName);
+            
             
             RadioButtonGroupData radioData = new RadioButtonGroupData("radioGroup");
             TextBoxData testBoxData2 = new TextBoxData("SectionDistance");
@@ -148,52 +149,62 @@ namespace FilterByParameter
             
             rbGroup = SectionPanel.AddItem(radioData) as RadioButtonGroup;
             ToggleButtonData tb1 = new ToggleButtonData("toggleButton1", "Prompt");
-            ToggleButtonData tb2 = new ToggleButtonData("toggleButton2", "No Prompt");
+            tb1.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "questionmark.png"), UriKind.Absolute));
+           
+            ToggleButtonData tb2 = new ToggleButtonData("toggleButton2", "No \n Prompt");
+            tb2.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "questionmark.png"), UriKind.Absolute));
             rbGroup?.AddItem(tb1);
             rbGroup?.AddItem(tb2);
             SectionPanel.AddSeparator();
+            rbGroup.ToolTip = "Auto Naming Prompt";
 
-            IList<RibbonItem> stackedItems = SectionPanel.AddStackedItems(testBoxData2, cbName);
+            IList<RibbonItem> stackedItems = SectionPanel.AddStackedItems(clipTitleData, testBoxData2, cbName);
 
             if (stackedItems.Count > 1)
             {
+                PushButton pb = stackedItems[0] as PushButton;
+                pb.Enabled = false;
 
-
-                TextBox tbox = stackedItems[0] as TextBox;
+                TextBox tbox = stackedItems[1] as TextBox;
                 if (tbox != null)
                 {
                     tbox.Value = Settings.Default["Clip"];
                     tbox.ShowImageAsButton = true;
                     tbox.ToolTip = "Set the Clipping Distance and press Enter";
+                    tbox.Width = 200;
                     // Register event handler ProcessText
                     tbox.EnterPressed +=
                         new EventHandler<Autodesk.Revit.UI.Events.TextBoxEnterPressedEventArgs>(ProcessText);
                 }
 
-                ComboBox cBox = stackedItems[1] as ComboBox;
+                ComboBox cBox = stackedItems[2] as ComboBox;
                 if (cBox != null)
                 {
                     cBox.ItemText = "ComboBox";
                     cBox.ToolTip = "Select an Option";
                     cBox.LongDescription = "Select a number or letter";
+                    
 
-                    string te = Environment.UserName;
-                    string et = Environment.GetEnvironmentVariable("Initials");
-                    //string re = uname;
-                    ComboBoxMemberData cboxMemDataA = new ComboBoxMemberData("A", te);
+                    if (Environment.UserName != null)
+                    {
+                        string te = Environment.UserName;
+                        ComboBoxMemberData cboxMemDataA = new ComboBoxMemberData("A", te);
 
-                    cBox.AddItem(cboxMemDataA);
-                    cboxMemDataA.GroupName = "Username";
+                        cBox.AddItem(cboxMemDataA);
+                        cboxMemDataA.GroupName = "Username";
+                    }
 
-                    ComboBoxMemberData cboxMemDataB = new ComboBoxMemberData("B", et);
+                    if (Environment.GetEnvironmentVariable("Initials") != null)
+                    {
+                        string et = Environment.GetEnvironmentVariable("Initials");
+                        ComboBoxMemberData cboxMemDataB = new ComboBoxMemberData("B", et);
 
-                    cBox.AddItem(cboxMemDataB);
-                    cboxMemDataB.GroupName = "Username";
+                        cBox.AddItem(cboxMemDataB);
+                        cboxMemDataB.GroupName = "Username";
+                    }
+                    
 
                     cBox.CurrentChanged += new EventHandler<Autodesk.Revit.UI.Events.ComboBoxCurrentChangedEventArgs>(ProcessCb);
-                   /* ComboBoxMemberData cboxMemDataC = new ComboBoxMemberData("C", re);
-
-                    cBox.AddItem(cboxMemDataC);*/
                 }
             }
             // create toggle buttons and add to radio button group
@@ -211,7 +222,6 @@ namespace FilterByParameter
             UIApplication doc = args.Application;
             SearchMark sm = new SearchMark();
             sm.Execute(doc, search);
-            //TaskDialog.Show("TextBox EnterPressed Event", search);
         }
 
         public void ProcessText(object sender, TextBoxEnterPressedEventArgs args)
@@ -221,7 +231,6 @@ namespace FilterByParameter
             tbox = value;
             Settings.Default["Clip"] = value;
             Settings.Default.Save();
-            //TaskDialog.Show("Option", value + " : " + uname);
         }
         public void ProcessCb(object sender, ComboBoxCurrentChangedEventArgs args)
         {
@@ -231,7 +240,6 @@ namespace FilterByParameter
             int i = cb.GetItems().IndexOf(args.NewValue);
             Settings.Default["UName"] = i;
             Settings.Default.Save();
-            //TaskDialog.Show("Option", test + " : " + rbGroup.Current.ItemText) ;
         }
     }
 
