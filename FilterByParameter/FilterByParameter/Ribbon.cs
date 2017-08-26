@@ -27,6 +27,7 @@ namespace FilterByParameter
 
         public string uname { get; set; }
         public string tbox { get; set; }
+        public Document doc { get; set; }
         public RadioButtonGroup rbGroup;
 
         public string UserName()
@@ -35,10 +36,26 @@ namespace FilterByParameter
             return myVariable;
         }
 
+        public void RegisterDockableWindow(UIApplication application, Guid mainPageGuid)
+        {
+            Globals.sm_UserDockablePaneId = new DockablePaneId(mainPageGuid);
+            application.RegisterDockablePane(Globals.sm_UserDockablePaneId, Globals.ApplicationName, Ribbon.thisApp.GetMainWindow() as IDockablePaneProvider);
+        }
+
+        /// <summary>
+        /// Register a dockable Window
+        /// </summary>
+        public void RegisterDockableWindow(UIControlledApplication application, Guid mainPageGuid)
+        {
+            Globals.sm_UserDockablePaneId = new DockablePaneId(mainPageGuid);
+            application.RegisterDockablePane(Globals.sm_UserDockablePaneId, Globals.ApplicationName, Ribbon.thisApp.GetMainWindow() as IDockablePaneProvider);
+        }
+
         public Result OnStartup(UIControlledApplication application)
         {
             try
             {
+
                 
                 CreateTheRibbonPanel(application);
                 application.ControlledApplication.DocumentOpened += OnDocOpened;
@@ -54,7 +71,7 @@ namespace FilterByParameter
         {
             //TaskDialog.Show("Now", "Now1");
             UIApplication app = new UIApplication(sender as Application);
-            Document doc = args.Document;
+            doc = args.Document;
             string username = doc.Application.Username;
             List<RibbonPanel> myPanels = app.GetRibbonPanels("BPS Customs");
             ComboBox cb = myPanels[2].GetItems()[3] as ComboBox;
@@ -106,7 +123,10 @@ namespace FilterByParameter
             string theribbon = "BPS Customs";
             string secondPanelName = "Mark Search";
             string panelParameterName = "Options for Section Cuts";
+            string gridPanel = "Grid Distance";
             application.CreateRibbonTab(theribbon);
+            thisApp = this;
+            m_APIUtility = new APIUtility();
 
             RibbonPanel TheRibbonPanel = application.CreateRibbonPanel(theribbon, firstPanelName);
 
@@ -138,7 +158,6 @@ namespace FilterByParameter
 
             RibbonPanel SectionPanel = application.CreateRibbonPanel(theribbon, panelParameterName);
             PushButtonData clipTitleData = new PushButtonData("Far Clip Offset", "Far Clip Offset", AddInPath, firstPanelName);
-            PushButtonData nameTitleData = new PushButtonData("Created By Options", "Far Clip Offset", AddInPath, firstPanelName);
             
             //The beginning of the radio button
             //Another Line
@@ -208,8 +227,26 @@ namespace FilterByParameter
                     cBox.CurrentChanged += new EventHandler<Autodesk.Revit.UI.Events.ComboBoxCurrentChangedEventArgs>(ProcessCb);
                 }
             }
+
+            RibbonPanel gridRibbonPanel = application.CreateRibbonPanel(theribbon, gridPanel);
+            PushButton gridButton = gridRibbonPanel.AddItem(new PushButtonData("Grid Distance",
+                "Distance \n from Grid", AddInPath, "FilterByParameter.GridDistance")) as PushButton;
+            pushButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass.png"), UriKind.Absolute));
+            pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
+            pushButton.ToolTip = "Select an element with the desired parameter value. Select the parameter you would like to filter by in the dropdown menu.";
+
+            PushButtonData pushButtonRegisterPageData = new PushButtonData(Globals.RegisterPage, Globals.RegisterPage,
+                AddInPath, typeof(ExternalCommandRegisterPage).FullName);
+            pushButtonRegisterPageData.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Register.png")));
+            PushButton pushButtonRegisterPage = gridRibbonPanel.AddItem(pushButtonRegisterPageData) as PushButton;
+            pushButtonRegisterPage.AvailabilityClassName = typeof(ExternalCommandRegisterPage).FullName;
+
+            PushButtonData pushButtonShowPageData = new PushButtonData(Globals.ShowPage, Globals.ShowPage, AddInPath, typeof(ExternalCommandShowPage).FullName);
+            pushButtonShowPageData.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Show.png")));
+            PushButton pushButtonShowPage = gridRibbonPanel.AddItem(pushButtonShowPageData) as PushButton;
+            pushButtonShowPage.AvailabilityClassName = typeof(ExternalCommandShowPage).FullName;
             // create toggle buttons and add to radio button group
-            
+
         }
 
         /// <summary>
@@ -242,7 +279,77 @@ namespace FilterByParameter
             Settings.Default["UName"] = i;
             Settings.Default.Save();
         }
+
+        /// <summary>
+        /// Create the new WPF Page that Revit will dock.
+        /// </summary>
+        public void CreateWindow()
+        {
+            m_mainPage = new DockWindow();
+        }
+
+        /// <summary>
+        /// Show or hide a dockable pane.
+        /// </summary>
+        public void SetWindowVisibility(Autodesk.Revit.UI.UIApplication application, bool state)
+        {
+            DockablePane pane = application.GetDockablePane(Globals.sm_UserDockablePaneId);
+            if (pane != null)
+            {
+                if (state)
+                    pane.Show();
+                else
+                    pane.Hide();
+            }
+
+
+        }
+
+
+        public bool IsMainWindowAvailable()
+        {
+
+            if (m_mainPage == null)
+                return false;
+
+            bool isAvailable = true;
+            try { bool isVisible = m_mainPage.IsVisible; }
+            catch (Exception)
+            {
+                isAvailable = false;
+            }
+            return isAvailable;
+
+        }
+
+        public DockWindow GetMainWindow()
+        {
+            if (!IsMainWindowAvailable())
+                throw new InvalidOperationException("Main window not constructed.");
+            return m_mainPage;
+        }
+
+        public APIUtility GetDockableAPIUtility() { return m_APIUtility; }
+
+
+
+        public Autodesk.Revit.UI.DockablePaneId MainPageDockablePaneId
+        {
+
+            get { return Globals.sm_UserDockablePaneId; }
+        }
+
+        #region Data
+
+        DockWindow m_mainPage;
+        internal static Ribbon thisApp = null;
+        private APIUtility m_APIUtility;
+
+
+        #endregion
     }
+
+
 
 
 }

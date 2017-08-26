@@ -1,0 +1,71 @@
+﻿<Page x:Class="FilterByParameter.DockWindow"
+      xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:dat="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:FilterByParameter"
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
+      Title="Dockable Dialogs"  Height="373.864" Width="200"
+      x:Name="DockableDialogs"  Background="White" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition/>
+            <RowDefinition Height="0*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0">Log</Label>
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <Button Name="btn_wpf_stats" Click="select_grids_Click">Change Grid Selection</Button>
+            <Button Name="btn_listTabs" Click="beamSelect_Click">Select Beam</Button>
+        </StackPanel>
+        
+        <ScrollViewer CanContentScroll="True" Grid.Row="1">
+            <Grid ShowGridLines="True" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Content="Reference Grid 1" Grid.Row="0" Grid.Column="0"></Label>
+                <Label Content="Reference Grid 2" Grid.Row="1" Grid.Column="0"></Label>
+                <Label Content="Beam Mark" Grid.Row="2" Grid.Column="0"></Label>
+                <Label Content="Beam Start X" Grid.Row="3" Grid.Column="0"></Label>
+                <Label Content="Beam Start Y" Grid.Row="4" Grid.Column="0"></Label>
+                <Label Content="Beam End X" Grid.Row="5" Grid.Column="0"></Label>
+                <Label Content="Beam End Y" Grid.Row="6" Grid.Column="0"></Label>
+                <Label Content="Column Loc Mark" Grid.Row="7" Grid.Column="0"></Label>
+                <Label Content="Column X" Grid.Row="8" Grid.Column="0"></Label>
+                <Label Content="Column Y" Grid.Row="9" Grid.Column="0"></Label>
+            
+                <Label Name="HGrid" Content="??" Grid.Row="0" Grid.Column="1" ></Label>
+                <Label Name="VGrid" Content="??" Grid.Row="1" Grid.Column="1"></Label>
+                <Label Name="BMark" Content="??" Grid.Row="2" Grid.Column="1"></Label>
+                <Label Name="XDist" Content="??" Grid.Row="3" Grid.Column="1"></Label>
+                <Label Name="YDist" Content="??" Grid.Row="4" Grid.Column="1"></Label>
+                <Label Name="XDist2" Content="??" Grid.Row="5" Grid.Column="1"></Label>
+                <Label Name="YDist2" Content="??" Grid.Row="6" Grid.Column="1"></Label>
+                <Label Name="CMark" Content="??" Grid.Row="7" Grid.Column="1"></Label>
+                <Label Name="XCol" Content="??" Grid.Row="8" Grid.Column="1"></Label>
+                <Label Name="YCol" Content="??" Grid.Row="9" Grid.Column="1"></Label>
+            </Grid>
+        </ScrollViewer>
+
+
+
+    </Grid>
+</Page>
