@@ -105,6 +105,12 @@ namespace FilterByParameter
     [Autodesk.Revit.Attributes.Journaling(Autodesk.Revit.Attributes.JournalingMode.NoCommandData)]
     public class BeamSelect : IExternalCommand
     {
+        public static string Mark { get; set; }
+        public static string StartX { get; set; }
+        public static string StartY { get; set; }
+        public static string EndX { get; set; }
+        public static string EndY { get; set; }
+
         public static string BMark { get; set; }
         public static string CMark { get; set; }
         public static string stX1 { get; set; }
@@ -136,6 +142,12 @@ namespace FilterByParameter
                     Curve lcc = lc.Curve;
                     GridDistance dist = new GridDistance();
                     BMark = el3.get_Parameter(BuiltInParameter.ALL_MODEL_MARK).AsString();
+                    Mark = "Beam Mark";
+                    StartX = "Beam Start X";
+                    StartY = "Beam Start Y";
+                    EndX = "Beam End X";
+                    EndY = "Beam End Y";
+                    
 
                     XYZ st = DistancePoint(GridDistance.origin, lcc, 0);
                     double stX = st.X;
@@ -149,16 +161,46 @@ namespace FilterByParameter
                     double edY = ed.Y;
                     edY1 = decToFrac(edY);
                 }
-                else
+                else if (el3.Category.Name == "Structural Columns")
                 {
                     LocationPoint lp = el3.Location as LocationPoint;
-                    CMark = el3.get_Parameter(BuiltInParameter.COLUMN_LOCATION_MARK).AsString();
+                    BMark = el3.get_Parameter(BuiltInParameter.COLUMN_LOCATION_MARK).AsString();
+                    Mark = "Column Location Mark";
+                    StartX = "Column X Distance";
+                    StartY = "Column Y Distance";
 
                     XYZ cP = DPoint(GridDistance.origin, lp);
                     double clX = cP.X;
-                    clX1 = decToFrac(clX);
+                    stX1 = decToFrac(clX);
                     double clY = cP.Y;
-                    clY1 = decToFrac(clY);
+                    stY1 = decToFrac(clY);
+                    edX1 = "??";
+                    edY1 = "??";
+                }
+                else
+                {
+                    LocationCurve wc = (LocationCurve) el3.Location;
+                    Curve wcc = wc.Curve;
+
+                    BMark = el3.get_Parameter(BuiltInParameter.ALL_MODEL_MARK).AsString();
+                    Mark = "Wall Mark";
+                    StartX = "Wall Start X";
+                    StartY = "Wall Start Y";
+                    EndX = "Wall End X";
+                    EndY = "Wall End Y";
+
+                    XYZ st = DistancePoint(GridDistance.origin, wcc, 0);
+                    double stX = st.X;
+                    stX1 = decToFrac(stX);
+                    double stY = st.Y;
+                    stY1 = decToFrac(stY);
+
+                    XYZ ed = DistancePoint(GridDistance.origin, wcc, 1);
+                    double edX = ed.X;
+                    edX1 = decToFrac(edX);
+                    double edY = ed.Y;
+                    edY1 = decToFrac(edY);
+
                 }
                 
 
@@ -175,23 +217,69 @@ namespace FilterByParameter
         {
             double whole;
             double wholeinch;
+            double fracinch;
+            string stfrac = null;
             if (o < 0)
             {
                 whole = Math.Ceiling(o);
                 double remain =  whole - o;                
                 double inch = remain * 12;
-                wholeinch = Math.Round(inch);
+                wholeinch = Math.Floor(inch);
+                double remainin = inch - wholeinch;
+                if (remainin == 0)
+                {
+
+                }else if ((Math.Round(remainin * 8) % 2) == 0)
+                {
+                    fracinch = Math.Round(Math.Round(remainin * 16) / 4);
+                    stfrac = fracinch + "/4";
+                }else if ((Math.Round(remainin * 16) % 2) == 0)
+                {
+                    fracinch = Math.Round(remainin * 8);
+                    stfrac = fracinch + "/8";
+                }else
+                {
+                    fracinch = Math.Round(remainin * 16);
+                    stfrac = fracinch + "/16";
+                }
             }
             else
             {
                 whole = Math.Floor(o);
                 double remain = o - whole;
                 double inch = remain * 12;
-                wholeinch = Math.Round(inch);
+                wholeinch = Math.Floor(inch);
+                double remainin = inch - wholeinch;
+                if (remainin == 0)
+                {
+
+                }
+                else if ((Math.Round(remainin * 8) % 2) == 0)
+                {
+                    fracinch = Math.Round(remainin * 4);
+                    stfrac = fracinch + "/4";
+                }
+                else if ((Math.Round(remainin * 16) % 2) == 0)
+                {
+                    fracinch = Math.Round(remainin * 8);
+                    stfrac = fracinch + "/8";
+                }
+                else
+                {
+                    fracinch = Math.Round(remainin * 16);
+                    stfrac = fracinch + "/16";
+                }
+            }
+
+            if (stfrac == null)
+            {
+                return whole.ToString() + "' " + wholeinch.ToString() + "\"";
+            }
+            else
+            {
+                return whole.ToString() + "' " + wholeinch.ToString() + " " + stfrac + "\"";
             }
             
-
-            return whole.ToString() + "' " + wholeinch.ToString() + "\"";
         }
         public static XYZ DistancePoint(XYZ o, Curve beam, int loc)
         {
@@ -237,7 +325,7 @@ namespace FilterByParameter
     {
         public bool AllowElement(Element element)
         {
-            if (element.Category.Name == "Structural Framing" || element.Category.Name == "Structural Columns")
+            if (element.Category.Name == "Structural Framing" || element.Category.Name == "Structural Columns" || element.Category.Name == "Walls")
             {
                 return true;
             }

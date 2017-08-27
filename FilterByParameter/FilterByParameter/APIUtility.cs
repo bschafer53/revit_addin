@@ -196,12 +196,8 @@ namespace FilterByParameter
     class Globals
     {
 
-        public const string ApplicationName = "DockableDialogs";
-        public const string DiagnosticsTabName = "DockableDialogs";
-        public const string DiagnosticsPanelName = "DockableDialogs Panel";
-
-        public const string RegisterPage = "Register Page";
-        public const string ShowPage = "Show Page";
+        public const string RegisterPage = "Register Grid Window";
+        public const string ShowPage = "Show Grid Window";
         public const string HidePage = "Hide Page";
 
 

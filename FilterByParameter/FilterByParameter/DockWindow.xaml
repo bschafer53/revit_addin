@@ -7,6 +7,7 @@
       xmlns:System="clr-namespace:System;assembly=mscorlib"
       Title="Dockable Dialogs"  Height="373.864" Width="200"
       x:Name="DockableDialogs"  Background="White" >
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -19,11 +20,11 @@
         <Label Grid.Row="0">Log</Label>
         <StackPanel Grid.Row="0" Grid.Column="0">
             <Button Name="btn_wpf_stats" Click="select_grids_Click">Change Grid Selection</Button>
-            <Button Name="btn_listTabs" Click="beamSelect_Click">Select Beam</Button>
+            <Button Name="btn_listTabs" Click="beamSelect_Click">Select Beam/Column/Wall</Button>
         </StackPanel>
         
         <ScrollViewer CanContentScroll="True" Grid.Row="1">
-            <Grid ShowGridLines="True" Grid.Row="1">
+            <Grid ShowGridLines="False" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -32,36 +33,239 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
+
                 </Grid.RowDefinitions>
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                <Border Grid.Row="0" Grid.Column="0" BorderThickness="0,0,0.25,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="0" BorderThickness="0,0,0.25,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="0" BorderThickness="0,0,0.25,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="3" Grid.Column="0" BorderThickness="0,0,0.25,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="4" Grid.Column="0" BorderThickness="0,0,0.25,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="5" Grid.Column="0" BorderThickness="0,0,0.25,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="6" Grid.Column="0" BorderThickness="0,0,0.25,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1" BorderThickness="0,0,0,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,0,0,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="1" BorderThickness="0,0,0,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="3" Grid.Column="1" BorderThickness="0,0,0,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="4" Grid.Column="1" BorderThickness="0,0,0,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="5" Grid.Column="1" BorderThickness="0,0,0,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <Border Grid.Row="6" Grid.Column="1" BorderThickness="0,0,0,0.25">
+                    <Border.BorderBrush>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Rectangle StrokeDashArray="1 2"
+                                           Stroke="Black"
+                                           StrokeThickness="1"
+                                           RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                           RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.BorderBrush>
+                </Border>
                 <Label Content="Reference Grid 1" Grid.Row="0" Grid.Column="0"></Label>
                 <Label Content="Reference Grid 2" Grid.Row="1" Grid.Column="0"></Label>
-                <Label Content="Beam Mark" Grid.Row="2" Grid.Column="0"></Label>
-                <Label Content="Beam Start X" Grid.Row="3" Grid.Column="0"></Label>
-                <Label Content="Beam Start Y" Grid.Row="4" Grid.Column="0"></Label>
-                <Label Content="Beam End X" Grid.Row="5" Grid.Column="0"></Label>
-                <Label Content="Beam End Y" Grid.Row="6" Grid.Column="0"></Label>
-                <Label Content="Column Loc Mark" Grid.Row="7" Grid.Column="0"></Label>
-                <Label Content="Column X" Grid.Row="8" Grid.Column="0"></Label>
-                <Label Content="Column Y" Grid.Row="9" Grid.Column="0"></Label>
-            
-                <Label Name="HGrid" Content="??" Grid.Row="0" Grid.Column="1" ></Label>
+                <Label Name="Mark" Content="Beam Mark" Grid.Row="2" Grid.Column="0"></Label>
+                <Label Name="StartX" Content="Beam Start X" Grid.Row="3" Grid.Column="0"></Label>
+                <Label Name="StartY" Content="Beam Start Y" Grid.Row="4" Grid.Column="0"></Label>
+                <Label Name="EndX" Content="Beam End X" Grid.Row="5" Grid.Column="0"></Label>
+                <Label Name="EndY" Content="Beam End Y" Grid.Row="6" Grid.Column="0"></Label>
+
+                <Label Name="HGrid" Content="??"  Grid.Row="0" Grid.Column="1" ></Label>
                 <Label Name="VGrid" Content="??" Grid.Row="1" Grid.Column="1"></Label>
-                <Label Name="BMark" Content="??" Grid.Row="2" Grid.Column="1"></Label>
-                <Label Name="XDist" Content="??" Grid.Row="3" Grid.Column="1"></Label>
-                <Label Name="YDist" Content="??" Grid.Row="4" Grid.Column="1"></Label>
-                <Label Name="XDist2" Content="??" Grid.Row="5" Grid.Column="1"></Label>
-                <Label Name="YDist2" Content="??" Grid.Row="6" Grid.Column="1"></Label>
-                <Label Name="CMark" Content="??" Grid.Row="7" Grid.Column="1"></Label>
-                <Label Name="XCol" Content="??" Grid.Row="8" Grid.Column="1"></Label>
-                <Label Name="YCol" Content="??" Grid.Row="9" Grid.Column="1"></Label>
+                <TextBox Name="BMark" Grid.Row="2" Grid.Column="1" BorderThickness="0" Background="Transparent" IsReadOnly="True" VerticalAlignment="Center">??</TextBox>
+                <TextBox Name="StX" Grid.Row="3" Grid.Column="1" BorderThickness="0" Background="Transparent" IsReadOnly="True" VerticalAlignment="Center">??</TextBox>
+                <TextBox Name="StY" Grid.Row="4" Grid.Column="1" BorderThickness="0" Background="Transparent" IsReadOnly="True" VerticalAlignment="Center">??</TextBox>
+                <TextBox Name="EdX" Grid.Row="5" Grid.Column="1" BorderThickness="0" Background="Transparent" IsReadOnly="True" VerticalAlignment="Center">??</TextBox>
+                <TextBox Name="EdY" Grid.Row="6" Grid.Column="1" BorderThickness="0" Background="Transparent" IsReadOnly="True" VerticalAlignment="Center">??</TextBox>
             </Grid>
         </ScrollViewer>
 

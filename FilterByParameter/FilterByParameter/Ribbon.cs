@@ -39,7 +39,7 @@ namespace FilterByParameter
         public void RegisterDockableWindow(UIApplication application, Guid mainPageGuid)
         {
             Globals.sm_UserDockablePaneId = new DockablePaneId(mainPageGuid);
-            application.RegisterDockablePane(Globals.sm_UserDockablePaneId, Globals.ApplicationName, Ribbon.thisApp.GetMainWindow() as IDockablePaneProvider);
+            application.RegisterDockablePane(Globals.sm_UserDockablePaneId, "Distance from Reference Grid", Ribbon.thisApp.GetMainWindow() as IDockablePaneProvider);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace FilterByParameter
         public void RegisterDockableWindow(UIControlledApplication application, Guid mainPageGuid)
         {
             Globals.sm_UserDockablePaneId = new DockablePaneId(mainPageGuid);
-            application.RegisterDockablePane(Globals.sm_UserDockablePaneId, Globals.ApplicationName, Ribbon.thisApp.GetMainWindow() as IDockablePaneProvider);
+            application.RegisterDockablePane(Globals.sm_UserDockablePaneId, "Distance from Reference Grid", Ribbon.thisApp.GetMainWindow() as IDockablePaneProvider);
         }
 
         public Result OnStartup(UIControlledApplication application)
@@ -229,22 +229,30 @@ namespace FilterByParameter
             }
 
             RibbonPanel gridRibbonPanel = application.CreateRibbonPanel(theribbon, gridPanel);
-            PushButton gridButton = gridRibbonPanel.AddItem(new PushButtonData("Grid Distance",
-                "Distance \n from Grid", AddInPath, "FilterByParameter.GridDistance")) as PushButton;
-            pushButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass.png"), UriKind.Absolute));
-            pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
-            pushButton.ToolTip = "Select an element with the desired parameter value. Select the parameter you would like to filter by in the dropdown menu.";
+
 
             PushButtonData pushButtonRegisterPageData = new PushButtonData(Globals.RegisterPage, Globals.RegisterPage,
                 AddInPath, typeof(ExternalCommandRegisterPage).FullName);
             pushButtonRegisterPageData.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Register.png")));
-            PushButton pushButtonRegisterPage = gridRibbonPanel.AddItem(pushButtonRegisterPageData) as PushButton;
-            pushButtonRegisterPage.AvailabilityClassName = typeof(ExternalCommandRegisterPage).FullName;
+            pushButtonRegisterPageData.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Register-s.png")));
+            
+            
 
             PushButtonData pushButtonShowPageData = new PushButtonData(Globals.ShowPage, Globals.ShowPage, AddInPath, typeof(ExternalCommandShowPage).FullName);
             pushButtonShowPageData.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Show.png")));
-            PushButton pushButtonShowPage = gridRibbonPanel.AddItem(pushButtonShowPageData) as PushButton;
-            pushButtonShowPage.AvailabilityClassName = typeof(ExternalCommandShowPage).FullName;
+            pushButtonShowPageData.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Show-s.png")));
+            
+            
+
+            IList<RibbonItem> stackedItems2 = gridRibbonPanel.AddStackedItems(pushButtonRegisterPageData, pushButtonShowPageData);
+            if (stackedItems2.Count > 1)
+            {
+                PushButton pushButtonRegisterPage = stackedItems2[0] as PushButton;
+                pushButtonRegisterPage.AvailabilityClassName = typeof(ExternalCommandRegisterPage).FullName;
+
+                PushButton pushButtonShowPage = stackedItems2[1] as PushButton;
+                pushButtonShowPage.AvailabilityClassName = typeof(ExternalCommandShowPage).FullName;
+            }
             // create toggle buttons and add to radio button group
 
         }

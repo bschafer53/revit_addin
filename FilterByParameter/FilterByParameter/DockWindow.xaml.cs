@@ -65,19 +65,7 @@ namespace FilterByParameter
         {
             switch (data.CommandType)
             {
-                case (ModelessCommandType.PrintMainPageStatistics):
-                {
-                    Log.Message("***Main Pane***");
-                    Log.Message(data.WindowSummaryData);
-                    break;
-                }
-
-                case (ModelessCommandType.PrintSelectedPageStatistics):
-                {
-                    Log.Message("***Selected Pane***");
-                    Log.Message(data.WindowSummaryData);
-                    break;
-                }
+ 
                 case (ModelessCommandType.gridSelect):
                 {
                     HGrid.Content = GridDistance.HGrid;
@@ -87,14 +75,18 @@ namespace FilterByParameter
                 }
                 case (ModelessCommandType.beamSelect):
                 {
-                    BMark.Content= BeamSelect.BMark;
-                    XDist.Content = BeamSelect.stX1;
-                    YDist.Content = BeamSelect.stY1;
-                    XDist2.Content = BeamSelect.edX1;
-                    YDist2.Content = BeamSelect.edY1;
-                    CMark.Content = BeamSelect.CMark;
-                    XCol.Content = BeamSelect.clX1;
-                    YCol.Content = BeamSelect.clY1;
+                    Mark.Content = BeamSelect.Mark;
+                    StartX.Content = BeamSelect.StartX;
+                    StartY.Content = BeamSelect.StartY;
+                    EndX.Content = BeamSelect.EndX;
+                    EndY.Content = BeamSelect.EndY;
+
+                    BMark.Text = BeamSelect.BMark;
+                    StX.Text = BeamSelect.stX1;
+                    StY.Text = BeamSelect.stY1;
+                    EdX.Text = BeamSelect.edX1;
+                    EdY.Text = BeamSelect.edY1;
+
 
                     break;
                 }
@@ -105,22 +97,7 @@ namespace FilterByParameter
         }
 
 
-        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
-                if (child != null && child is childItem) return (childItem) child;
-                else
-                {
-
-                    childItem childOfChild = FindVisualChild<childItem>(child);
-                    if (childOfChild != null) return childOfChild;
-                }
-            }
-
-            return null;
-        }
+ 
 
         #endregion
 
@@ -172,51 +149,16 @@ namespace FilterByParameter
             Log.Message("***Intial docking parameters***");
             Log.Message(APIUtility.GetDockStateSummary(data.InitialState));
 
-        }
+        } 
 
-        private void PaneInfoButton_Click(object sender, RoutedEventArgs e)
-        {
-            RaisePrintSummaryCommand();
-        }
-
-
-        private void RaisePrintSummaryCommand()
-        {
-            ModelessCommandData data = new ModelessCommandData();
-            data.CommandType = ModelessCommandType.PrintMainPageStatistics;
-            Ribbon.thisApp.GetDockableAPIUtility().RunModelessCommand(data);
-            m_exEvent.Raise();
-        }
-
-        private void RaisePrintSpecificSummaryCommand(string guid)
-        {
-            ModelessCommandData data = new ModelessCommandData();
-            data.CommandType = ModelessCommandType.PrintSelectedPageStatistics;
-            data.SelectedPaneId = guid;
-            Ribbon.thisApp.GetDockableAPIUtility().RunModelessCommand(data);
-            m_exEvent.Raise();
-        }
-
-
-        public string GetPageWpfData()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("-WFP Page Info-");
-            sb.AppendLine("FrameWorkElement.Width=" + this.Width);
-            sb.AppendLine("FrameWorkElement.Height=" + this.Height);
-
-            return sb.ToString();
-        }
-
-        public void SetInitialDockingParameters(int left, int right, int top, int bottom, DockPosition position,
-            Guid targetGuid)
+        public void SetInitialDockingParameters( DockPosition position)
         {
             m_position = position;
-            m_left = left;
-            m_right = right;
-            m_top = top;
-            m_bottom = bottom;
-            m_targetGuid = targetGuid;
+            m_left = 10;
+            m_right = 710;
+            m_top = 10;
+            m_bottom = 710;
+
         }
 
         #region Data

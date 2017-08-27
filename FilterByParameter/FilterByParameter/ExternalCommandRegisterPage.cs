@@ -24,14 +24,14 @@ namespace FilterByParameter
             if (dlgResult == false)
                 return Result.Succeeded;
 
-            Ribbon.thisApp.GetMainWindow().SetInitialDockingParameters(dlg.FloatLeft, dlg.FloatRight, dlg.FloatTop, dlg.FloatBottom, dlg.DockPosition, dlg.TargetGuid);
+            Ribbon.thisApp.GetMainWindow().SetInitialDockingParameters(dlg.DockPosition);
             try
             {
                 Ribbon.thisApp.RegisterDockableWindow(commandData.Application, dlg.MainPageGuid);
             }
             catch (Exception ex)
             {
-                TaskDialog.Show(Globals.ApplicationName, ex.Message);
+                TaskDialog.Show("Error", ex.Message);
             }
             return Result.Succeeded;
         }
