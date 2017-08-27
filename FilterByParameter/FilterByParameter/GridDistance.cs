@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms.VisualStyles;
+using Autodesk.Windows;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExternalService;
@@ -17,7 +20,27 @@ namespace FilterByParameter
     [Autodesk.Revit.Attributes.Journaling(Autodesk.Revit.Attributes.JournalingMode.NoCommandData)]
     class GridDistance : IExternalCommand
     {
-        
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        public bool SetFocusToRevit()
+        {
+            IntPtr hRevit = Process.GetCurrentProcess().MainWindowHandle;
+            
+
+            if (hRevit != IntPtr.Zero)
+            {
+                return SetForegroundWindow(hRevit);
+                
+            }
+            return false;
+        }
+
         public static string HGrid { get; set; }
         public static string VGrid { get; set; }
         public static XYZ origin { get; set; }
@@ -66,7 +89,7 @@ namespace FilterByParameter
             }
             catch (Exception e)
             {
-                TaskDialog.Show("Grid", e.Message);
+                Autodesk.Revit.UI.TaskDialog.Show("Grid", e.Message);
                 return Result.Failed;
             }
         }
@@ -208,7 +231,7 @@ namespace FilterByParameter
             }
             catch (Exception e)
             {
-                TaskDialog.Show("Revit", e.Message);
+                Autodesk.Revit.UI.TaskDialog.Show("Revit", e.Message);
                 return Result.Cancelled;
             }
         }
@@ -257,7 +280,18 @@ namespace FilterByParameter
                 else if ((Math.Round(remainin * 8) % 2) == 0)
                 {
                     fracinch = Math.Round(remainin * 4);
-                    stfrac = fracinch + "/4";
+                    if (fracinch == 4)
+                    {
+                        wholeinch += 1;
+                    }else if (fracinch == 0)
+                    {
+
+                    }
+                    else
+                    {
+                        stfrac = fracinch + "/4";
+                    }
+                    
                 }
                 else if ((Math.Round(remainin * 16) % 2) == 0)
                 {

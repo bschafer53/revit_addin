@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Runtime.InteropServices;
+using Autodesk.Windows;
 using System.Diagnostics;
 using System.IO;
 using Autodesk.Revit.UI;
@@ -12,6 +14,27 @@ namespace FilterByParameter
 {
     public partial class APIUtility
     {
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        public bool SetFocusToRevit()
+        {
+            IntPtr hRevit = Autodesk.Windows.ComponentManager.ApplicationWindow;
+
+
+            if (hRevit != IntPtr.Zero)
+            {
+                return SetForegroundWindow(hRevit);
+
+            }
+            return false;
+        }
+
+
         /// <summary>
         /// Store a reference to the application.
         /// </summary>
@@ -47,9 +70,23 @@ namespace FilterByParameter
                 {
                     UIDocument uidoc = m_uiApplication.ActiveUIDocument;
                     GridDistance gd = new GridDistance();
-                    gd.Execute(uidoc);
+                    try
+                    {
+                        bool test = SetFocusToRevit();
+                        //Autodesk.Revit.UI.TaskDialog.Show("Set", Autodesk.Windows.ComponentManager.ApplicationWindow.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        Autodesk.Revit.UI.TaskDialog.Show("Not Set", e.Message);
+                        throw;
+                    }
+
+                        gd.Execute(uidoc);
+                    
                     ModelessCommand.Make(command);
-                    break;
+                   
+
+                        break;
                 }
                 case ModelessCommandType.beamSelect:
                 {
@@ -189,7 +226,7 @@ namespace FilterByParameter
             Console.WriteLine(message);
             Debug.WriteLine(message);
             if (level > 0)
-                TaskDialog.Show("Revit", message);
+                Autodesk.Revit.UI.TaskDialog.Show("Revit", message);
         }
     }
 
