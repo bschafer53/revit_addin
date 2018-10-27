@@ -277,6 +277,22 @@ namespace FilterByParameter
                 {
 
                 }
+                else if ((Math.Round(remainin * 4) % 2) == 0)
+                {
+                    fracinch = Math.Round(remainin * 2);
+                    if (fracinch == 2)
+                    {
+                        wholeinch += 1;
+                    }
+                    else if (fracinch == 0)
+                    {
+
+                    }
+                    else
+                    {
+                        stfrac = fracinch + "/2";
+                    }
+                }
                 else if ((Math.Round(remainin * 8) % 2) == 0)
                 {
                     fracinch = Math.Round(remainin * 4);

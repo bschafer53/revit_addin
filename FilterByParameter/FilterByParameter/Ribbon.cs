@@ -15,6 +15,10 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using Settings = FilterByParameter.Properties.Settings;
+using System.Drawing;
+using System.Windows.Media;
+using System.Resources;
+using System.Windows.Data;
 
 namespace FilterByParameter
 {
@@ -140,8 +144,9 @@ namespace FilterByParameter
             //SplitButton splitButton = TheRibbonPanel.AddItem(splitButtonData) as SplitButton;
             PushButton pushButton = TheRibbonPanel.AddItem(new PushButtonData("Parameter Filter",
                 "Filter by \n Parameter", AddInPath, "FilterByParameter.ParameterFilter")) as PushButton;
-            pushButton.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass.png"), UriKind.Absolute));
-            pushButton.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
+            ImageSourceConverter it = new ImageSourceConverter();
+            pushButton.LargeImage = (ImageSource)it.ConvertFrom(Properties.Resources.magnifyingglass);//Properties.Resources.magnifyingglass
+            pushButton.Image = new BitmapImage(new Uri("/magnifyingglass-s.png", UriKind.Relative));
             pushButton.ToolTip = "Select an element with the desired parameter value. Select the parameter you would like to filter by in the dropdown menu.";
             //pushButton.ToolTipImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Blue4thFloorBuilding.gif"), UriKind.Absolute));
             //pushButton = splitButton.AddPushButton(new PushButtonData("Parameter Filter Project", "Filter by Parameter: Entire Project", AddInPath, "FilterByParameter.ParameterFilterProject"));
@@ -154,7 +159,7 @@ namespace FilterByParameter
             TextBoxData testBoxData = new TextBoxData("SearchMark");
             Autodesk.Revit.UI.TextBox textBox = (Autodesk.Revit.UI.TextBox)(SecRibbonPanel.AddItem(testBoxData));
             textBox.PromptText = "new Mark search"; //default wall mark
-            textBox.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
+            //textBox.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "magnifyingglass-s.png"), UriKind.Absolute));
             textBox.ToolTip = "Search for Elements with a Mark containing: ";
             textBox.Width = 150;
             textBox.ShowImageAsButton = true;
@@ -174,10 +179,10 @@ namespace FilterByParameter
             
             rbGroup = SectionPanel.AddItem(radioData) as RadioButtonGroup;
             ToggleButtonData tb1 = new ToggleButtonData("toggleButton1", "Prompt");
-            tb1.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "questionmark.png"), UriKind.Absolute));
+            //tb1.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "questionmark.png"), UriKind.Absolute));
            
             ToggleButtonData tb2 = new ToggleButtonData("toggleButton2", "No \n Prompt");
-            tb2.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "questionmark.png"), UriKind.Absolute));
+            //tb2.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "questionmark.png"), UriKind.Absolute));
             rbGroup?.AddItem(tb1);
             rbGroup?.AddItem(tb2);
             SectionPanel.AddSeparator();
@@ -238,14 +243,14 @@ namespace FilterByParameter
 
             PushButtonData pushButtonRegisterPageData = new PushButtonData(Globals.RegisterPage, Globals.RegisterPage,
                 AddInPath, typeof(ExternalCommandRegisterPage).FullName);
-            pushButtonRegisterPageData.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Register.png")));
-            pushButtonRegisterPageData.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Register-s.png")));
+            //pushButtonRegisterPageData.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Register.png")));
+            //pushButtonRegisterPageData.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Register-s.png")));
             
             
 
             PushButtonData pushButtonShowPageData = new PushButtonData(Globals.ShowPage, Globals.ShowPage, AddInPath, typeof(ExternalCommandShowPage).FullName);
-            pushButtonShowPageData.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Show.png")));
-            pushButtonShowPageData.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Show-s.png")));
+            //pushButtonShowPageData.LargeImage = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Show.png")));
+            //pushButtonShowPageData.Image = new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Show-s.png")));
             
             
 
@@ -362,7 +367,32 @@ namespace FilterByParameter
         #endregion
     }
 
+    public class WPFBitmapConverter : IValueConverter
+    {
+        #region IValueConverter Members
 
+        public object Convert(object value, Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            MemoryStream ms = new MemoryStream();
+            ((System.Drawing.Bitmap)value).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+
+            return image;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
 
 
 }

@@ -66,8 +66,6 @@ D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\bin\x64\Debug\zh-CN\AdWindows.resources.dll
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\bin\x64\Debug\zh-TW\AdWindows.resources.dll
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter.csprojResolveAssemblyReference.cache
-D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\DockingSetupDialog.baml
-D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\DockingSetupDialog.g.cs
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\DockWindow.g.cs
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter_MarkupCompile.cache
 D:\Users\bscha\Documents\GitHub\revit_addin\FilterByParameter\FilterByParameter\obj\x64\Debug\FilterByParameter_MarkupCompile.lref

@@ -18,16 +18,13 @@ namespace FilterByParameter
         {
             Ribbon.thisApp.GetDockableAPIUtility().Initialize(commandData.Application);
             Ribbon.thisApp.CreateWindow();
+            
 
-            DockingSetupDialog dlg = new DockingSetupDialog();
-            Nullable<bool> dlgResult = dlg.ShowDialog();
-            if (dlgResult == false)
-                return Result.Succeeded;
-
-            Ribbon.thisApp.GetMainWindow().SetInitialDockingParameters(dlg.DockPosition);
+            Ribbon.thisApp.GetMainWindow().SetInitialDockingParameters(Autodesk.Revit.UI.DockPosition.Floating);
             try
             {
-                Ribbon.thisApp.RegisterDockableWindow(commandData.Application, dlg.MainPageGuid);
+                Ribbon.thisApp.RegisterDockableWindow(commandData.Application, Globals.sm_UserDockablePaneId.Guid);
+                TaskDialog.Show("Success", "The window has been registered");
             }
             catch (Exception ex)
             {

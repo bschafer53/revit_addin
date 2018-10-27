@@ -82,9 +82,6 @@
   <ItemGroup>
     <Compile Include="APIExternalEventHandler.cs" />
     <Compile Include="APIUtility.cs" />
-    <Compile Include="DockingSetupDialog.xaml.cs">
-      <DependentUpon>DockingSetupDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DockWindow.xaml.cs">
       <DependentUpon>DockWindow.xaml</DependentUpon>
     </Compile>
@@ -116,7 +113,7 @@
       <DependentUpon>ParameterSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -128,14 +125,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="DockingSetupDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="DockWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\magnifyingglass.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\magnifyingglass-s.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
